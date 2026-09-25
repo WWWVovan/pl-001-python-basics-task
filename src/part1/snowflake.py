@@ -1,20 +1,20 @@
-import time  # noqa: F401
+import time
 
-from .constants import (  # noqa: F401
+from .constants import (
     EPOCH_MS_DEFAULT,
+    NODE_ID_BITS,
     NODE_ID_DEFAULT,
     NODE_ID_MAX,
-    SEQUENCE_ID_MAX,
-    TIMESTAMP_MS_MAX,
-    TIMESTAMP_BITS,
-    NODE_ID_BITS,
     SEQUENCE_ID_BITS,
-    
+    SEQUENCE_ID_MAX,
+    TIMESTAMP_BITS,
+    TIMESTAMP_MS_MAX,
 )
 
 
 def read_current_millis(epoch_ms: int) -> int:
-    return time.time_ns()//10**6 - epoch_ms
+    return time.time_ns() // 10**6 - epoch_ms
+
 
 def decode_timestamp_ms(snowflake_id: int, epoch_ms: int = EPOCH_MS_DEFAULT) -> int:
     stored_time = snowflake_id >> (NODE_ID_BITS + SEQUENCE_ID_BITS)
@@ -36,15 +36,11 @@ def generate_snowflake_id(
 ) -> int | None:
 
     if not (0 <= node_id <= NODE_ID_MAX):
-        print(
-            f"node_id must be in [0, {NODE_ID_MAX}], got {node_id}"
-        )
+        print(f"node_id must be in [0, {NODE_ID_MAX}], got {node_id}")
         return None
 
     if not (0 <= sequence_id <= SEQUENCE_ID_MAX):
-        print(
-            f"sequence_id must be in [0, {SEQUENCE_ID_MAX}], got {sequence_id}"
-        )
+        print(f"sequence_id must be in [0, {SEQUENCE_ID_MAX}], got {sequence_id}")
         return None
 
     timestamp_ms = read_current_millis(epoch_ms)
