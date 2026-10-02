@@ -67,6 +67,6 @@ def delete_product(storage: list[Product], product_id: int) -> int | None:
         if product[PRODUCT_ID_INDEX] == product_id:
             storage.remove(product)
             return product_id
-    
+
     print(f"no product with id {product_id}")
     return None
