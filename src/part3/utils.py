@@ -15,11 +15,11 @@ def normalize_price(price: Decimal) -> Decimal:
 
 
 def normalize_product_name(name: str) -> str:
-    return "".join(name.split().lower())
+    return " ".join(name.lower().split())
 
 
-def rowing_product(product: Product) -> tuple:
-    return tuple(
+def rowing_product(product: Product) -> tuple[str, ...]:
+    return (
         str(product[PRODUCT_ID_INDEX]),
         product[NAME_INDEX],
         str(product[PRICE_INDEX]),
@@ -27,24 +27,22 @@ def rowing_product(product: Product) -> tuple:
     )
 
 
-def drawing_row(cells: tuple[str, ...], widths: tuple[str, ...]) -> str:
+def drawing_row(cells: tuple[str, ...], widths: tuple[int, ...]) -> str:
     new_row = tuple(cell.ljust(width) for cell, width in zip(cells, widths))
-    new_row = " | " + " | ".join(new_row) + " |"
-    return new_row
+    return "| " + " | ".join(new_row) + " |"
 
 
 def get_storage_str_representation(storage: list[Product]) -> str:
-    rows = list(TABLE_HEADERS) + [rowing_product(i) for i in storage]
+    rows = [TABLE_HEADERS] + [rowing_product(product) for product in storage]
 
     widths_of_string = tuple(
-        (max(len(row[i])) for row in rows) for i in range(len(TABLE_HEADERS))
+        max(len(row[i]) for row in rows) for i in range(len(TABLE_HEADERS))
     )
 
     header = drawing_row(TABLE_HEADERS, widths_of_string)
     sep_line = "|" + "|".join("-" * (width + 2) for width in widths_of_string) + "|"
 
-    lines = [drawing_row(row, widths_of_string) for row in rows[:1]]
-    rows = [header, sep_line].extend(lines)
-    table = "\n".join(rows)
+    lines = [drawing_row(row, widths_of_string) for row in rows[1:]]
+    table = "\n".join([header, sep_line] + lines)
 
     return table

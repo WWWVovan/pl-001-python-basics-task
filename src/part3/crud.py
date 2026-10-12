@@ -27,7 +27,7 @@ def create_product(
         return None
 
     if any(product[NAME_INDEX] == name for product in storage):
-        print(f"product name {name} is already taken.")
+        print(f"product name '{name}' is already taken")
         return None
 
     new_product_id = generate_product_id(storage)
@@ -58,6 +58,14 @@ def update_product(
     if not normalized_name:
         print("product name must not be blank")
         return None
+
+    for product in storage:
+        if (
+            product[NAME_INDEX] == normalized_name
+            and product[PRODUCT_ID_INDEX] != product_id
+        ):
+            print(f"product name '{normalized_name}' is already taken")
+            return None
 
     for i, product in enumerate(storage):
         if product[PRODUCT_ID_INDEX] == product_id:

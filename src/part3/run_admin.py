@@ -78,18 +78,21 @@ def run_command(storage: list[Product], line: str) -> bool:
         case ["exit"]:
             return False
         case ["show"]:
-            get_storage_str_representation()
+            print_result(get_storage_str_representation(storage))
             return True
         case ["read", product_id]:
-            print_result(read_product(storage, product_id))
+            print_result(read_product(storage, int(product_id)))
             return True
         case ["delete", product_id]:
-            print_result(delete_product(storage, product_id))
+            print_result(delete_product(storage, int(product_id)))
+            return True
         case ["update", product_id, *args] if len(args) >= 3:
             name = " ".join(args[:-2])
             price = Decimal(args[-2])
             quantity = int(args[-1])
-            print_result(update_product(storage, product_id, (name, price, quantity)))
+            print_result(
+                update_product(storage, int(product_id), (name, price, quantity))
+            )
             return True
         case ["create", *args] if len(args) >= 3:
             name = " ".join(args[:-2])
